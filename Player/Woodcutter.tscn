@@ -1,38 +1,19 @@
 [gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://Player/Woodcutter.gd" type="Script" id=1]
-[ext_resource path="res://Player/Woodcutter/Woodcutter_idle.png" type="Texture" id=2]
+[ext_resource path="res://Player/Sequence/Woodcutter.tres" type="SpriteFrames" id=2]
 [ext_resource path="res://StateMachine/StateMachine.gd" type="Script" id=3]
 [ext_resource path="res://Player/Move.gd" type="Script" id=4]
 [ext_resource path="res://Player/Idle.gd" type="Script" id=5]
 [ext_resource path="res://Player/Walk.gd" type="Script" id=6]
+[ext_resource path="res://Player/RoleSkin.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Player/Common/shadow.png" type="Texture" id=8]
+[ext_resource path="res://Player/Jump.gd" type="Script" id=9]
+[ext_resource path="res://Player/Air.gd" type="Script" id=10]
+[ext_resource path="res://Player/Run.gd" type="Script" id=11]
 
 [sub_resource type="CapsuleShape2D" id=1]
 height = 12.1214
-
-[sub_resource type="AtlasTexture" id=2]
-atlas = ExtResource( 2 )
-region = Rect2( 0, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=3]
-atlas = ExtResource( 2 )
-region = Rect2( 48, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=4]
-atlas = ExtResource( 2 )
-region = Rect2( 96, 0, 48, 48 )
-
-[sub_resource type="AtlasTexture" id=5]
-atlas = ExtResource( 2 )
-region = Rect2( 144, 0, 48, 48 )
-
-[sub_resource type="SpriteFrames" id=6]
-animations = [ {
-"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
-"loop": true,
-"name": "idle",
-"speed": 5.0
-} ]
 
 [node name="Woodcutter" type="KinematicBody2D"]
 script = ExtResource( 1 )
@@ -41,14 +22,20 @@ script = ExtResource( 1 )
 position = Vector2( -0.0413361, -16.1173 )
 shape = SubResource( 1 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
-position = Vector2( 7.52093, -24.1581 )
-frames = SubResource( 6 )
+[node name="RoleSkin" parent="." instance=ExtResource( 7 )]
+
+[node name="Shadow" parent="RoleSkin" index="0"]
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 8 )
+
+[node name="AnimatedSprite" parent="RoleSkin" index="1"]
+position = Vector2( 6.96854, -24.0468 )
+frames = ExtResource( 2 )
 animation = "idle"
-frame = 3
 
 [node name="StateMachine" type="Node" parent="."]
 script = ExtResource( 3 )
+initial_state = NodePath("Move/Idle")
 
 [node name="Move" type="Node" parent="StateMachine"]
 script = ExtResource( 4 )
@@ -58,3 +45,14 @@ script = ExtResource( 5 )
 
 [node name="Walk" type="Node" parent="StateMachine/Move"]
 script = ExtResource( 6 )
+
+[node name="Jump" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 9 )
+
+[node name="Air" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 10 )
+
+[node name="Run" type="Node" parent="StateMachine/Move"]
+script = ExtResource( 11 )
+
+[editable path="RoleSkin"]

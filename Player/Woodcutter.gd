@@ -1,7 +1,8 @@
 extends KinematicBody2D
 
-onready var Sprite = $AnimatedSprite
+const FLOOR_NORMAL := Vector2.UP
 
-func _ready():
-	pass
-	
+onready var skin:RoleSkin = $RoleSkin
+
+export(NodePath) var debug_panel:NodePath
+

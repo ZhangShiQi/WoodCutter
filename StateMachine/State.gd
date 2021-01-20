@@ -13,7 +13,9 @@ var _parent: State = null
 func _ready() -> void:
 	yield(owner, "ready")
 	_parent = get_parent() as State
-
+	
+	set_process(false)
+	set_physics_process(false)
 
 func unhandled_input(_event: InputEvent) -> void:
 	pass
