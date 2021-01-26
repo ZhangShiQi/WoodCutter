@@ -1,25 +1,23 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://Player/Woodcutter.gd" type="Script" id=1]
 [ext_resource path="res://Player/Sequence/Woodcutter.tres" type="SpriteFrames" id=2]
 [ext_resource path="res://StateMachine/StateMachine.gd" type="Script" id=3]
 [ext_resource path="res://Player/Move.gd" type="Script" id=4]
 [ext_resource path="res://Player/Idle.gd" type="Script" id=5]
-[ext_resource path="res://Player/Walk.gd" type="Script" id=6]
 [ext_resource path="res://Player/RoleSkin.tscn" type="PackedScene" id=7]
 [ext_resource path="res://Player/Common/shadow.png" type="Texture" id=8]
-[ext_resource path="res://Player/Jump.gd" type="Script" id=9]
 [ext_resource path="res://Player/Air.gd" type="Script" id=10]
 [ext_resource path="res://Player/Run.gd" type="Script" id=11]
 
-[sub_resource type="CapsuleShape2D" id=1]
-height = 12.1214
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 10, 15.9455 )
 
 [node name="Woodcutter" type="KinematicBody2D"]
 script = ExtResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2( -0.0413361, -16.1173 )
+position = Vector2( 0, -16 )
 shape = SubResource( 1 )
 
 [node name="RoleSkin" parent="." instance=ExtResource( 7 )]
@@ -29,7 +27,7 @@ scale = Vector2( 0.2, 0.2 )
 texture = ExtResource( 8 )
 
 [node name="AnimatedSprite" parent="RoleSkin" index="1"]
-position = Vector2( 6.96854, -24.0468 )
+position = Vector2( 6.96854, -23.99 )
 frames = ExtResource( 2 )
 animation = "idle"
 
@@ -42,12 +40,6 @@ script = ExtResource( 4 )
 
 [node name="Idle" type="Node" parent="StateMachine/Move"]
 script = ExtResource( 5 )
-
-[node name="Walk" type="Node" parent="StateMachine/Move"]
-script = ExtResource( 6 )
-
-[node name="Jump" type="Node" parent="StateMachine/Move"]
-script = ExtResource( 9 )
 
 [node name="Air" type="Node" parent="StateMachine/Move"]
 script = ExtResource( 10 )

@@ -2,10 +2,12 @@
 # 
 extends State
 
+
+
 export var max_speed_default := Vector2(150.0, 500.0)
 export var acceleration_default := Vector2(500.0, 500.0)
 export var walk_speed_scale := 0.5
-export var jump_impulse := 180.0
+export var jump_impulse := 200.0
 
 
 var is_walking = false
@@ -14,8 +16,9 @@ var acceleration := acceleration_default
 var max_speed := max_speed_default
 var velocity := Vector2.ZERO
 
-var snap_distance = 320
+var snap_distance = 1.0
 var snap_vector = Vector2(0, snap_distance)
+var enable_gravity := true setget _set_enable_gravity
 
 
 func enter(_msg:Dictionary = {}) -> void:
@@ -31,12 +34,12 @@ func physics_process(delta) -> void:
 	elif velocity.x < -0.1:
 		owner.skin.scale.x = -1
 		
-	print(velocity)
 	
 func unhandled_input(event: InputEvent) -> void:
-	if event.is_action("player_walk"):
+	if event.is_action_pressed("player_walk"):
 		is_walking = true
-	else:
+		
+	if event.is_action_released("player_walk"):
 		is_walking = false
 		
 #	if event.is_action_released("player_walk"):
@@ -46,6 +49,14 @@ func unhandled_input(event: InputEvent) -> void:
 		if event.is_action_pressed("player_jump"):
 			_state_machine.transition_to("Move/Air", {is_jumping = true, impulse = jump_impulse})
 	
+func _set_enable_gravity(new_value):
+	if new_value	 != enable_gravity:
+		enable_gravity = new_value
+		
+		if enable_gravity:
+			snap_vector.y = snap_distance
+		else:
+			snap_vector.y = 0
 
 static func calculate_velocity(
 		_old_velocity: Vector2,

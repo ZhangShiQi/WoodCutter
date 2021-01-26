@@ -8,7 +8,7 @@ func enter(msg: Dictionary = {}) -> void:
 	
 	is_jumping = false
 	
-	_parent.snap_vector.y = 0
+	_parent.enable_gravity = false
 	_parent.acceleration.x *= acceleration_x_scale
 	
 	if "is_jumping" in msg:
@@ -26,15 +26,19 @@ func enter(msg: Dictionary = {}) -> void:
 func physics_process(_delta):
 	_parent.physics_process(_delta)
 
-	if owner.is_on_floor():
-		_state_machine.transition_to("Move/Idle")
+	if owner.is_on_floor():		
+		if _parent.get_move_direction().x == 0.0:
+			_state_machine.transition_to("Move/Idle")
+		else:
+			_state_machine.transition_to("Move/Run")
+		
 	
 func exit() -> void:
 	if is_jumping:
 		owner.skin.disconnect("animation_finished", self, "_on_anim_finished")
 	
 	_parent.acceleration = _parent.acceleration_default
-	_parent.snap_vector.y = _parent.snap_distance
+	_parent.enable_gravity = true
 	_parent.exit()
 
 func _on_anim_finished(_name:String):

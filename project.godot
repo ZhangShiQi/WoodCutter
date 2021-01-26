@@ -42,6 +42,10 @@ config/name="TestWoodcutter"
 run/main_scene="res://World/TestWorld.tscn"
 config/icon="res://icon.png"
 
+[debug]
+
+settings/fps/force_fps=30
+
 [display]
 
 window/size/width=320
