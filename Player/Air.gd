@@ -32,6 +32,8 @@ func physics_process(_delta):
 		else:
 			_state_machine.transition_to("Move/Run")
 		
+func unhandled_input(event: InputEvent) -> void:
+	_parent.unhandled_input(event)
 	
 func exit() -> void:
 	if is_jumping:
