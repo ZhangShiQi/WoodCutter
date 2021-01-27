@@ -26,7 +26,7 @@ func enter(msg: Dictionary = {}) -> void:
 func physics_process(_delta):
 	_parent.physics_process(_delta)
 
-	if owner.is_on_floor():		
+	if owner.is_on_floor():
 		if _parent.get_move_direction().x == 0.0:
 			_state_machine.transition_to("Move/Idle")
 		else:
@@ -50,8 +50,6 @@ func _on_anim_finished(_name:String):
 		
 		is_jumping = false
 		owner.skin.disconnect("animation_finished", self, "_on_anim_finished")
-		
-		
 	
 func calculate_jump_velocity(impulse: float = 0.0) -> Vector2:
 	return _parent.calculate_velocity(

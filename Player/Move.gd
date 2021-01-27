@@ -26,14 +26,21 @@ func enter(_msg:Dictionary = {}) -> void:
 	
 	
 func physics_process(delta) -> void:
-	velocity = calculate_velocity(velocity, max_speed, acceleration, delta, get_move_direction())
+	var move_dir = get_move_direction()
+	velocity = calculate_velocity(velocity, max_speed, acceleration, delta, move_dir)
 	velocity = owner.move_and_slide_with_snap(velocity, snap_vector, owner.FLOOR_NORMAL)
-	
+
 	if velocity.x > 0.1:
-		owner.skin.scale.x = 1
-	elif velocity.x < -0.1:
-		owner.skin.scale.x = -1
-		
+		if move_dir.x < -0.1:
+			owner.skin.scale.x = -1
+		else:
+			owner.skin.scale.x = 1
+	elif velocity.x < -0.1: 
+		if move_dir.x > 0.1:
+			owner.skin.scale.x = 1
+		else:
+			owner.skin.scale.x = -1
+	
 	
 func unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("player_walk"):
