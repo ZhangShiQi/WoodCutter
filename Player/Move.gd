@@ -48,22 +48,26 @@ func unhandled_input(event: InputEvent) -> void:
 		
 	if event.is_action_released("player_walk"):
 		is_walking = false
-		
-#	if event.is_action_released("player_walk"):
-#		is_walking = false
 	
 	if owner.is_on_floor():
 		if event.is_action_pressed("player_jump"):
 			_state_machine.transition_to("Move/Air", {is_jumping = true, impulse = jump_impulse})
+		
+		if _state_machine.state.name != "Attack" and  event.is_action_pressed("player_attack"):
+			_state_machine.transition_to("Move/Attack")
+	
+	if event.is_action_pressed("test_hurt"):
+		_state_machine.transition_to("Move/Hurt")
 	
 func _set_enable_gravity(new_value):
-	if new_value	 != enable_gravity:
+	if new_value != enable_gravity:
 		enable_gravity = new_value
 		
 		if enable_gravity:
 			snap_vector.y = snap_distance
 		else:
 			snap_vector.y = 0
+
 
 static func calculate_velocity(
 		_old_velocity: Vector2,

@@ -14,8 +14,11 @@ export var shadow_origin_scale: float = 0.1
 
 
 func play(name:String) -> void:
+	anim.frame = 0
 	anim.play(name, false)
 
+func get_play_percent() -> float:
+	return float(anim.frame) / float(anim.frames.get_frame_count(anim.animation))
 
 func _on_AnimatedSprite_animation_finished():
 	emit_signal("animation_finished", name)

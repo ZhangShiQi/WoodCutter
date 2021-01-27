@@ -14,10 +14,14 @@ var break_jumping_timer = 0.0
 # 中断跳跃系数, 中断时向上的加速度将会被乘以该值
 var break_jumping_scale = 0.5
 
+
+var continue_jump = false
+
 func enter(msg: Dictionary = {}) -> void:
 	_parent.enter(msg)
 	
 	is_jumping = false
+	continue_jump = false
 	
 	break_jumping_timer = 1.5
 	
@@ -43,10 +47,13 @@ func physics_process(_delta):
 	break_jumping_timer -= _delta
 
 	if owner.is_on_floor():
-		if _parent.get_move_direction().x == 0.0:
-			_state_machine.transition_to("Move/Idle")
+		if continue_jump:
+			_state_machine.transition_to("Move/Air", {is_jumping = true, impulse = _parent.jump_impulse})
 		else:
-			_state_machine.transition_to("Move/Run")
+			if _parent.get_move_direction().x == 0.0:
+				_state_machine.transition_to("Move/Idle")
+			else:
+				_state_machine.transition_to("Move/Run")
 		
 func unhandled_input(event: InputEvent) -> void:
 	_parent.unhandled_input(event)
@@ -54,7 +61,12 @@ func unhandled_input(event: InputEvent) -> void:
 	if break_jumping_timer > 0:
 		if event.is_action_released("player_jump"):
 			_parent.velocity.y *= break_jumping_scale
-
+	
+	if event.is_action_pressed("player_jump"):
+		continue_jump = true
+		
+	if event.is_action_pressed("player_attack"):
+		pass
 	
 func exit() -> void:
 	if is_jumping:
