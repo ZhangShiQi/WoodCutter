@@ -1,18 +1,32 @@
 extends State
 
+onready var timer := $Timer
+
 var is_jumping:bool = false
 var acceleration_x_scale:float = 1.0
+
+# 中断跳跃时间阀
+export var break_jumping_duration = 1.5
+
+# 中断跳跃时间 这个时间会不断的降低, 在到0之前, 只要你松开跳跃键, 就可以是向上的加速度削减
+var break_jumping_timer = 0.0
+
+# 中断跳跃系数, 中断时向上的加速度将会被乘以该值
+var break_jumping_scale = 0.5
 
 func enter(msg: Dictionary = {}) -> void:
 	_parent.enter(msg)
 	
 	is_jumping = false
 	
+	break_jumping_timer = 1.5
+	
 	_parent.enable_gravity = false
 	_parent.acceleration.x *= acceleration_x_scale
 	
 	if "is_jumping" in msg:
 		is_jumping = msg.is_jumping
+#		timer.connect("timeout", self, _ch)
 	
 	if "impulse" in msg:
 		_parent.velocity += calculate_jump_velocity(msg.impulse)
@@ -25,6 +39,8 @@ func enter(msg: Dictionary = {}) -> void:
 
 func physics_process(_delta):
 	_parent.physics_process(_delta)
+	
+	break_jumping_timer -= _delta
 
 	if owner.is_on_floor():
 		if _parent.get_move_direction().x == 0.0:
@@ -34,6 +50,11 @@ func physics_process(_delta):
 		
 func unhandled_input(event: InputEvent) -> void:
 	_parent.unhandled_input(event)
+
+	if break_jumping_timer > 0:
+		if event.is_action_released("player_jump"):
+			_parent.velocity.y *= break_jumping_scale
+
 	
 func exit() -> void:
 	if is_jumping:

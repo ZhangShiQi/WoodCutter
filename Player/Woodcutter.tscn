@@ -44,6 +44,8 @@ script = ExtResource( 5 )
 [node name="Air" type="Node" parent="StateMachine/Move"]
 script = ExtResource( 10 )
 
+[node name="Timer" type="Timer" parent="StateMachine/Move/Air"]
+
 [node name="Run" type="Node" parent="StateMachine/Move"]
 script = ExtResource( 11 )
 
